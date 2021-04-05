@@ -10,7 +10,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "serialport": "^9.0.7"
+  },
   "devDependencies": {
     "nodemon": "^2.0.7"
   }
