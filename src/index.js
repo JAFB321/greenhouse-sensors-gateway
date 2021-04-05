@@ -1,5 +1,10 @@
 const net = require('net');
 const client = new net.Socket();
+const { ArduinoController } = require('./arduinoController');
+const { TestController } = require('./testController');
+
+const arduino = new ArduinoController({ portPath: 'COM1', baudRate: 9600 });
+const test = new TestController();
 
 // TCP/IP Client to communicate with the Server
 const PORT = 4000;
@@ -7,11 +12,6 @@ const HOST = 'localhost';
 
 client.connect(PORT, HOST, () => {
 	console.log(`Connected to the server ${HOST}:${PORT}`);
-});
-
-client.on('data', (data) => {
-	console.log('Data recieved from the Server');
-	console.log(data);
 });
 
 client.on('error', (error) => {
@@ -23,10 +23,20 @@ client.on('close', () => {
 	console.log('Connection Close');
 });
 
-// Send a message
-const msg = {
-	type: 'msg',
-	content: 'Hola mundo',
+client.on('data', (data) => {
+	console.log('Data recieved from the Server');
+	console.log(data);
+});
+
+// Send sensor values to server
+const sendTtoServer = (idSensor, value) => {
+	const sensor = {
+		id: idSensor,
+		value,
+	};
+	client.write(JSON.stringify(sensor));
 };
 
-client.write(JSON.stringify(msg));
+// Listen sensors controllers
+arduino.onSensorValue(sendTtoServer);
+test.onSensorValue(sendTtoServer);
