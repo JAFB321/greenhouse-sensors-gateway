@@ -29,9 +29,9 @@ client.on('data', (data) => {
 });
 
 // Send sensor values to server
-const sendTtoServer = (idSensor, value) => {
+const sendTtoServer = (sensorID, value) => {
 	const sensor = {
-		id: idSensor,
+		sensorID,
 		value,
 	};
 	client.write(JSON.stringify(sensor));
