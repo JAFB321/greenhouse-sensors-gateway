@@ -1,10 +1,9 @@
 const net = require('net');
 const client = new net.Socket();
-const { ArduinoController } = require('./arduinoController');
-const { TestController } = require('./testController');
+const { rabbitmqController } = require('./controllers/rabbitmqController');
 
-const arduino = new ArduinoController({ portPath: 'COM1', baudRate: 9600 });
-const test = new TestController();
+// RabbitMQ queue Client
+const sensorsQueue = new rabbitmqController({ HOST: 'localhost', Queue: 'sensorData' });
 
 // TCP/IP Client to communicate with the Server
 const PORT = 4000;
@@ -25,11 +24,11 @@ client.on('close', () => {
 
 client.on('data', (data) => {
 	console.log('Data recieved from the Server');
-	console.log(data);
+	console.log(data.toString());
 });
 
-// Send sensor values to server
-const sendTtoServer = (sensorID, value) => {
+// function to send sensor values to server
+const sendTtoServer = async (sensorID, value) => {
 	const sensor = {
 		sensorID,
 		value,
@@ -37,6 +36,5 @@ const sendTtoServer = (sensorID, value) => {
 	client.write(JSON.stringify(sensor));
 };
 
-// Listen sensors controllers
-arduino.onSensorValue(sendTtoServer);
-test.onSensorValue(sendTtoServer);
+// Listen queue sensor data and send it to the server TCP
+sensorsQueue.init(sendTtoServer);
