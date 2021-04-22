@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.7.1",
     "serialport": "^9.0.7"
   },
   "devDependencies": {
