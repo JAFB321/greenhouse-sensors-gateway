@@ -11,13 +11,9 @@ class ArduinoController {
 		});
 	}
 
-	onSensorValue(listener = (sensorID, value) => {}) {
+	onSensorValue(listener = (rawValue) => {}) {
 		this.parser.on('data', (data) => {
-			const [sensorID, sensorValue] = data.split(',');
-
-			if (sensorID && sensorValue) {
-				listener(sensorID, sensorValue);
-			}
+			listener(rawValue);
 		});
 	}
 }

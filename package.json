@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.7.1",
+    "dotenv": "^10.0.0",
     "serialport": "^9.0.7"
   },
   "devDependencies": {
