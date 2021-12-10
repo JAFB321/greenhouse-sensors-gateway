@@ -11,7 +11,7 @@ class QueueProducer {
 			this.connection = await amqp.connect(this.HOST);
 			this.channel = await this.connection.createChannel();
 
-			await this.channel.assertExchange('amq.fanout', 'fanout');
+			await this.channel.assertExchange('amq.direct', 'direct');
 			// await this.channel.assertQueue(this.Queue, {
 			// 	durable: true,
 			// });
@@ -25,7 +25,7 @@ class QueueProducer {
 
 	async send(msg) {
 		if (this.channel) {
-			const sent = await this.channel.publish('amq.fanout', '', Buffer.from(msg), {
+			const sent = await this.channel.publish('amq.direct', '', Buffer.from(msg), {
 				expiration: 4000,
 			});
 			if (sent) console.log('sent');

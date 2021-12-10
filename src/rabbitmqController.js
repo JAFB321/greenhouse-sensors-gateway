@@ -10,7 +10,7 @@ class rabbitmqController {
 
 	async init2() {
 		const connection = await amqp.connect(
-			'amqps://gcqrztja:PIZzJ3NjXjkSlcE971VVw9xGc3tWCEec@baboon.rmq.cloudamqp.com/gcqrztja'
+			'amqp://localhost' 
 		);
 		const channel = await connection.createChannel();
 
